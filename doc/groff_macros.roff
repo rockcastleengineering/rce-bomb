@@ -1,0 +1,29 @@
+.de Ps \" Printout start; $1 = indent (default is 5 spaces)
+.br
+.sp \\n(PDu
+.ns
+.nr pS \\n(.s   \" Save current point size
+.nr vS \\n(.v   \" Save current vertical spacing
+.nr pF \\n(.f   \" Save current font
+.nr pI \\n(.i   \" Save current indent
+.ps 8
+.vs 10
+.ft CW
+.ie	!"\\$1"" .in +\\$1n
+.el .in +5n
+.nf
+..
+.de Pe \" Printout end; $1 non-null, no concluding
+.br
+.if "\\$1"" .sp \\n(PDu
+.ps \\n(pSu
+.vs \\n(vSu
+.ft \\n(pF
+.in \\n(pIu
+.rr pS
+.rr VS
+.rr pF
+.rr PI
+.fi
+..
+

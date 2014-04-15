@@ -1,0 +1,49 @@
+#!/bin/bash
+# Glen Wiley <gwiley@rockcastleengineering.com>
+#
+# generate design document using groff
+
+maindoc=rce-bomb
+tocpages=3
+
+echo "---------------------------------------- image processing"
+# [[ septic_monitor_system_arch.eps -nt septic_monitor_system_arch.eps.eps ]] && ps2eps septic_monitor_system_arch.eps
+# [[ internetgatewayarch.eps -nt internetgatewayarch.eps.eps ]] && ps2eps internetgatewayarch.eps
+# [[ siteplanview.eps -nt siteplanview.eps.eps ]] && ps2eps siteplanview.eps
+
+echo "---------------------------------------- table conversion"
+# oldLC="$LC_ALL"
+# export LC_ALL=C
+# cat pumpmon-bom.csv | tr -d '' | awk -f csvbom2tbl.awk > pumpmon-bom.roff
+# LC_ALL="$oldLC"
+
+echo "---------------------------------------- m4"
+rm -f ${maindoc}.roff
+m4 -P main.roff > ${maindoc}.roff
+
+echo "---------------------------------------- groff"
+cat ${maindoc}.roff | tbl | pic | groff -me > ${maindoc}.ps
+ps2pdf ${maindoc}.ps
+
+echo "---------------------------------------- reorder pages"
+echo "   page count"
+pdf2dsc ${maindoc}.pdf ${maindoc}.dsc >/dev/null
+set -- $(grep DoPDFPage ${maindoc}.dsc | wc -l)
+np=$1
+np=$(( np - 1 ))
+toc=$(( 1 + np - tocpages ))
+echo "   page 1"
+ps2pdf -dFirstPage#1 -dLastPage#1 ${maindoc}.pdf tmpp1.pdf >/dev/null
+echo "   TOC pages $toc to $np"
+ps2pdf -dFirstPage#$toc -dLastPage#$np ${maindoc}.pdf tmptoc.pdf >/dev/null
+echo "   body"
+ps2pdf -dFirstPage#2 -dLastPage#$(( toc - 1 )) ${maindoc}.pdf tmpbody.pdf >/dev/null
+echo "   concatenate to reordered.pdf"
+gs -dNOPAUSE -dBATCH -sDEVICE=pdfwrite -sOutputFile=reordered.pdf -c save pop -f tmpp1.pdf tmptoc.pdf tmpbody.pdf > /dev/null
+rm -f tmpp1.pdf tmptoc.pdf tmpbody.pdf ${maindoc}.dsc ${maindoc}.pdf
+mv reordered.pdf ${maindoc}.pdf
+
+echo "---------------------------------------- document complete"
+echo "${maindoc}.pdf"
+
+# end
