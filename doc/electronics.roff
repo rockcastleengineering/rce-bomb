@@ -1,0 +1,210 @@
+./" start electronics.roff
+
+.nr sp 16
+.sh 1 "Electronics"
+.(x t
+Electronics
+.)x
+.nr sp 14
+
+.lp
+The core of the bomb is an ATMega328, a 28 pin 8-bit MCU that offers a low cost
+simple platform that is more than sufficient to drive all of the features of
+the base device and any upgrades.
+
+.lp
+The MCU is powered by a 3-4V supply and the clock is configured for 8Mhz.
+
+.lp
+.b \c
+.u "Battery and Charger"
+.lp
+The integrated charge controller and voltage regulator provides an interface
+to a Li-ion battery.  The charger has a fixed cable attached with a USB-A
+connector for charging.  This cable is tucked into the bomb case behind a
+screw in cover to protect it from damage.
+
+.lp
+TBD: Need to estimate run-time and battery size.
+
+
+.sh 2 "MCU Implementation"
+.(x t
+.ti 3
+MCU Implementation
+.)x
+
+.TS H
+center doublebox allbox;
+cb	cb	cb	cb
+l	l	l	l	.
+Pin	Mode	Connected To	Notes
+.TH
+1	RESET	NC	not connected
+2	PD0	tbd	tbd
+3	PD1	tbd	tbd
+4	PD2	tbd	tbd
+5	PD3	tbd	tbd
+6	PD4	tbd	tbd
+7 	Vcc	Vcc	Vcc, 3-4V
+8	GND	GND	GND
+9	PB6	tbd	tbd
+10	PB7	tbd	tbd
+11	PD5	tbd	tbd
+12	PD6	tbd	tbd
+13	PD7	tbd	tbd
+14	PB0	tbd	tbd
+15	PB1	tbd	tbd
+16	PB2	tbd	tbd
+17	PB3	tbd	tbd
+18	PB4	tbd	tbd
+19	PB5	tbd	tbd
+20	AVCC	Vcc	Vcc, 3-4V
+21	REF	tdb	tdb
+22	GND	GND	GND
+23	PC0	tbd	tbd
+24	PC1	tbd	tbd
+25	PC2	tbd	tbd
+26	PC3	tbd	tbd
+27	PC4	tbd	tbd
+28	PC5	tbd	tbd
+
+.TE
+.(c
+Table \n+T: MCU pin assignments
+.)c
+.(x T
+Table \n+T: MCU pin assignments
+.)x
+.nr T +1
+
+.sh 2 "Bill of Materials"
+.(x t
+.ti 3
+Bill of Materials
+.)x
+
+The bill of materials shows actual prices for components from the suppliers indicated for purchases in quantity 100.
+This is probably not the most competitive price, however it should be sufficient to show approximate capital costs.
+
+.ps -4
+m4_include(`pumpmon-bom.roff')
+.ps +4
+
+.(c
+Table \n+T: Monitor Board BOM
+.)c
+.(x T
+Table \n+T: Monitor Board BOM
+.)x
+.nr T +1
+
+Note that variants of the monitor board are detailed in each of the respective sections.
+The following table specifies precisely which components are populated on each variant of the monitor board.
+
+.TS H
+center doublebox allbox;
+cb	cb	cb	cb	cb	cb
+l	l	l	l	l	l	.
+Label	Rem Gwy/Pump Mon	Rem Gwy	Pump Mon	Tank Mon	Leach Fld
+.TH
+C1, MCU dec	X	X	X	X	X
+C2, MCU crys	X	X	X	X	X
+C3, MCU crys	X	X	X	X	X
+C4, 3.3V reg	X	X	X	X	X
+C5, batt wake			X	X
+C6, 5V reg	X	X		X	
+C7, 5V reg	X	X		X	
+C8, 5V reg	X	X		X	
+C9, Ser Reg	X	X	X	X	X
+C10, temp sens	X	X	X	X	X
+D1, batt			X	X
+D2, power	X	X	X	X
+D3, 5V reg	X	X		X	
+F1, DC fuse	X	X	X	X	
+F2, Batt fuse	 		X	X
+L1, 5V reg	X	X		X	
+Q1, batt wake				X	X
+Q2, temp sens	X	X	X	X	X
+Q3, AN sw	X		X		X	
+Q4, AN sw	X		X		X	
+Q5, AN sw	X		X		X	
+Q6, AN sw	X		X		X	
+Q7, 5V reg	X	X		X	
+Q8, 5V out	X	X		X	
+Q9, batt wake				X	X
+R3, Sens Vdiv	X		X		
+R4, Sens Vdiv	X		X		
+R5, Sens		 	X	X	X
+R6, Sens	 		X	X	X
+R7, Sens	 		X	X	X
+R8, Sens	 		X	X	X
+R9, batt wake				X	X
+R10, batt wake				X	X
+R10A, CT load	X		X		
+R10B, Sense				X
+R11A, CT load	X		X		
+R11B, Sense				X
+R12A, CT load	X		X		
+R13B, Sense				X
+R12, Vbatt sens				X	X
+R13, Vbatt sens				X	X
+R13A, CT load	X		X		
+R13B, Sense				X
+R17, MCLR	X	X	X	X	X
+R18, 5V reg	X	X		X	
+R19, batt wake				X	X
+RN1, AN sw	X		X	X	
+U1, MCU	 	X	X	X
+U1-alt, MCU	X	X			
+U2, 3.3V Reg	X	X	X	X	X
+U3, Radio	X	X	X	X	X
+U5, Ser. Reg.	X	 	X	X	X
+U6, 5V Reg.	X		X	X	
+Y1, MCU crys	X	X	X	X	X
+.TE
+
+.(c
+Table \n+T: Monitor Board BOM Variants
+.)c
+.(x T
+Table \n+T: Monitor Board BOM Variants
+.)x
+.nr T +1
+
+Possible alternative enclosures include:
+.bu
+Enclsr, NEMA4X, 6.63x4.68x2.37, HD-45FMMT, HD-45FMMT, qty 100: 10.28
+.bu
+Enclsr, IP65 indoor, 6.73x4.76x2.17, WA-24F, WA-24F, qty 100: 9.38
+
+.lp
+.b \c
+.u "Tank Monitor"
+.lp
+
+.lp
+.b \c
+.u "Pump Monitor"
+.lp
+The Serial register (U5) is used to switch power to the analog sensors, for example the current transformers.
+.lp
+.b \c
+.u "Remote Gateway"
+.lp
+
+./"NOTE: when generating schematics from eagle use print to postscript on letter size paper
+./", do not include the caption
+./"and you probably want to rotate the schematic and print in portrait mode.  No post-processing is
+./"needed to include them as eagle appears to write good eps
+
+.PSPIC "pw-pumpmon-02.ps"
+.(c
+Figure \n+F: Monitor Board Schematic
+.)c
+.(x f
+Figure \n+F: Monitor Board Schematic
+.)x
+.nr F +1
+
+./" end electronics.roff
